@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
+    <meta name="color-scheme" content="light only">
+    <meta name="theme-color" content="#2f2c51" />
+</head>
+<body>
+<div>
+    <div id="settings_container">
+        <div id="search_container">
+        <p id="input_text_label">Location</p>
+        <div onclick="deselect_city(this);" id="selected_city"></div>
+        <input oninput="search(this);" type="text" id="search_input" name="search_input">
+        <div id="city_select_container">
+        </div>
+        <div id="search_bottom"></div>
+    </div>
+    </div>
+</div>
+<script src="{{url_for('static', filename='js/search.js')}}"></script>
+
+</body>
+</html>
