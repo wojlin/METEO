@@ -6,21 +6,74 @@
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/index.css') }}">
     <meta name="color-scheme" content="light only">
     <meta name="theme-color" content="#2f2c51" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <script src="{{url_for('static', filename='js/search.js')}}"></script>
 </head>
 <body>
 <div>
     <div id="settings_container">
         <div id="search_container">
-        <p id="input_text_label">Location</p>
-        <div onclick="deselect_city(this);" id="selected_city"></div>
-        <input oninput="search(this);" type="text" id="search_input" name="search_input">
-        <div id="city_select_container">
+            <p class="step">1.</p>
+            <p id="location_label">Location</p>
+            <div onclick="deselect_city(this);" id="selected_city"></div>
+            <input oninput="meteo.search(this);" type="text" id="search_input" name="search_input" placeholder="">
+            <div id="city_select_container">
+            </div>
+            <div id="search_bottom"></div>
         </div>
-        <div id="search_bottom"></div>
-    </div>
+        <div id="time_container">
+            <p class="step">2.</p>
+            <p id="time_label">Forecast Ahead</p>
+            <div id="time_buttons_container">
+                <div>
+                    <button onclick="meteo.select_time(this, 1);" class="time_select_button">
+                        <span class="time_select_button_value">1</span><span class="time_select_button_label">Days</span>
+                    </button>
+                    <button onclick="meteo.select_time(this, 3);" class="time_select_button">
+                        <span class="time_select_button_value">3</span><span class="time_select_button_label">Days</span>
+                    </button>
+                </div>
+                <div>
+                    <button onclick="meteo.select_time(this, 7);" class="time_select_button">
+                        <span class="time_select_button_value">7</span><span class="time_select_button_label">Days</span>
+                    </button>
+                    <button onclick="meteo.select_time(this, 16);" class="time_select_button">
+                        <span class="time_select_button_value">16</span><span class="time_select_button_label">Days</span>
+                    </button>
+                </div>
+            </div>
+            <div id="time_bottom"></div>
+        </div>
+        <div id="forecast_container">
+            <p class="step">3.</p>
+            <p id="forecast_label">Choose Forecast</p>
+
+            <div id="forecast_bottom"></div>
+        </div>
+        <div id="prognose_container">
+            <p class="step">4.</p>
+            <p id="prognose_label">Prognose</p>
+
+            <div id="prognose_bottom"></div>
+        </div>
     </div>
 </div>
-<script src="{{url_for('static', filename='js/search.js')}}"></script>
+<script>
+
+    addEventListener("load", function() {
+        var viewport = document.querySelector("meta[name=viewport]");
+        viewport.setAttribute("content", viewport.content + ", height=" + window.innerHeight);
+    });
+
+    // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+    let vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+    const meteo = new Meteo();
+</script>
+
 
 </body>
 </html>

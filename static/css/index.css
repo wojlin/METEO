@@ -2,7 +2,17 @@
 {
 
     --text: #fcfffe;
-    --search_bar: #693dac;
+    --search_bar: #8049d5;
+    --time_bar: #553588;
+    --forecast_bar: #372053;
+    --prognose_bar: #272053;
+}
+
+@font-face
+{
+    font-family: fira-thin;
+    src: url('/static/fonts/FiraSans-Thin.ttf');
+    font-weight: normal;
 }
 
 @font-face
@@ -22,31 +32,52 @@
 
 body
 {
-    background: #2f2c51;
+    background: #1e1d2d;
+    overflow:hidden;
 }
 
 
 
 @media (min-aspect-ratio: 2/5)
 {
+    .step
+    {
+        position:absolute;
+        left:2vw;
+        top:50%;
+        line-height:0vw;
+        font-size: 13vw;
+    }
+
     #settings_container
     {
         font-size: 3vw;
         position:relative;
+        height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+        height: calc(var(--vh, 1vh) * 100);
+        width:100vw;
     }
 
     #search_container
     {
         background: var(--search_bar);
-        padding-bottom:5vw;
+        position:relative;
+        height:25%;
+        z-index:5;
     }
 
-    #input_text_label
+    #location_label, #time_label, #forecast_label, #prognose_label
     {
         text-align:center;
         margin:auto;
-        font-size:4vw;
-        padding:2vw;
+        font-family: fira-thin;
+        font-size:6vw;
+        padding:3vw;
+    }
+
+    #time_label, #forecast_label, #prognose_label
+    {
+        padding-top:5vw;
     }
 
     #search_input
@@ -54,8 +85,8 @@ body
         display:block;
         margin:auto;
         width:70%;
-        height:10vw;
-        font-size: 7vw;
+        height:15vw;
+        font-size: 9vw;
         background: #7449b5;
         outline: none;
         border: solid 2px var(--text);
@@ -64,6 +95,7 @@ body
         -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
         -moz-box-sizing: border-box;    /* Firefox, other Gecko */
         box-sizing: border-box;         /* Opera/IE 8+ */
+        margin-top:3vw;
     }
 
 
@@ -94,6 +126,8 @@ body
         border-right: solid 2px var(--text);
         border-bottom: solid 2px var(--text);
         border-top: none;
+        z-index:10;
+        position:relative;
     }
 
     .city_select_button > img
@@ -102,7 +136,7 @@ body
         height:5vw;
         display:inline-block;
         float:left;
-        margin-top:2vw;
+        margin-top:2.5vw;
         margin-left:2vw;
     }
 
@@ -130,13 +164,29 @@ body
         margin-left: auto;
         margin-right: auto;
         text-align: center;
-        line-height: 10vw;
+        line-height: 15vw;
+        margin-top:3vw;
 
+    }
+
+    #selected_city > img
+    {
+        width: 8vw;
+        height:8vw;
+        display:inline-block;
+        float:left;
+        margin-top:3.5vw;
+        margin-left:2vw;
+    }
+
+    #selected_city  > p
+    {
+        display:inline-block;
     }
 
     .selected_city_name
     {
-        font-size: 6vw;
+        font-size: 8vw;
         margin:1vw;
     }
 
@@ -160,5 +210,113 @@ body
         border-bottom-left-radius: 2vw;
         border-bottom-right-radius: 2vw;
     }
+
+
+    #time_container
+    {
+        background: var(--time_bar);
+        height:25%;
+        width:100%;
+        position:relative;
+        z-index:4;
+    }
+
+    #time_bottom
+    {
+        position:absolute;
+        width: 70%;
+        bottom:-3vw;
+        height:5vw;
+        left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+        background: var(--time_bar);
+        border-bottom-left-radius: 2vw;
+        border-bottom-right-radius: 2vw;
+    }
+
+    #time_buttons_container
+    {
+        width:70%;
+        margin:auto;
+        margin-top:-3vw;
+    }
+
+    .time_select_button {
+	width: 38%;
+	height: 10vw;
+	margin: 5%;
+	background: #7449b5;
+	border: solid 2px var(--text);
+	border-radius: 3vw;
+}
+
+    .time_select_button_value
+    {
+        font-size:8vw;
+    }
+
+    .time_select_button_label
+    {
+        font-size:4vw;
+        line-height:4vw;
+    }
+
+
+    #forecast_container
+    {
+        background: var(--forecast_bar);
+        height:25%;
+        position:relative;
+        z-index:3;
+    }
+
+    #forecast_bottom
+    {
+        position:absolute;
+        width: 70%;
+        bottom:-3vw;
+        height:5vw;
+        left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+        background: var(--forecast_bar);
+        border-bottom-left-radius: 2vw;
+        border-bottom-right-radius: 2vw;
+    }
+
+
+
+
+
+
+
+    #prognose_container
+    {
+        background: var(--prognose_bar);
+        height:25%;
+        width:100%;
+        position:relative;
+        z-index:2;
+    }
+
+
+    #prognose_bottom
+    {
+        position:absolute;
+        width: 70%;
+        bottom:-3vw;
+        height:5vw;
+        left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+        background: var(--prognose_bar);
+        border-bottom-left-radius: 2vw;
+        border-bottom-right-radius: 2vw;
+    }
+
 }
 
