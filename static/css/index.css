@@ -12,18 +12,6 @@
 }
 
 
-:root
-{
-
-    --text: #F6F2F6;
-    --background-text: #1C252C;
-    --search_bar: #58545B;
-    --time_bar: #B7A7AE;
-    --forecast_bar: #E1D5D9;
-    --prognose_bar: #F6F2F6;
-    --button: #1C252C;
-    --background: #1C252C;
-}
 
 :root
 {
@@ -635,39 +623,15 @@ body
         margin: auto;
         text-align:center;
         margin-top: 2vw;
-    }
+        display: none;    }
 
     .chart
     {
         display: block;
         width:90vw !important;
+        height: auto;
         margin:auto;
         margin-top:2vw;
-    }
-
-    #temperature_chart
-    {
-        height: 20vh !important;
-    }
-
-    #pressure_chart
-    {
-        height: 15vh !important;
-    }
-
-    #humidity_chart
-    {
-        height: 17vh !important;
-    }
-
-    #wind_chart
-    {
-        height: 10vh !important;
-    }
-
-    #cloud_chart
-    {
-        height: 15vh !important;
     }
 
 }

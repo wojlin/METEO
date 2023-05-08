@@ -53,7 +53,7 @@ class Meteo
         let json = JSON.parse(response);
         console.log(json);
 
-        const ctx = document.getElementById('temperature_chart');
+
 
         let amount = Object.keys(json["hourly"]["time"]).length;
 
@@ -84,23 +84,60 @@ class Meteo
 
 
 
-        const chartAreaBorder = {
-          id: 'chartAreaBorder',
-          beforeDraw(chart, args, options) {
-            const {ctx, chartArea: {left, top, width, height}} = chart;
-            ctx.save();
-            ctx.strokeStyle = options.borderColor;
-            ctx.lineWidth = options.borderWidth;
-            ctx.setLineDash(options.borderDash || []);
-            ctx.lineDashOffset = options.borderDashOffset;
-            ctx.strokeRect(left, top, width, height);
-            ctx.restore();
-          }
-        };
+
+        let charts_amount = 0;
+
+        if(meteo.includes("temperature_2m") && meteo.includes("apparent_temperature"))
+        {
+            charts_amount += 1;
+        }
+
+        if(meteo.includes("pressure_msl"))
+        {
+            charts_amount += 1;
+        }
+
+        if(meteo.includes("relativehumidity_2m") && meteo.includes("rain"))
+        {
+            charts_amount += 1;
+        }
+
+        if(meteo.includes("windspeed_10m") && meteo.includes("winddirection_10m"))
+        {
+            charts_amount += 1;
+        }
+
+        if(meteo.includes("cloudcover") && meteo.includes("cloudcover_low") && meteo.includes("cloudcover_mid") && meteo.includes("cloudcover_high"))
+        {
+            charts_amount += 1;
+        }
+
+        let size = 80 / charts_amount;
+
+        console.log("active charts: " + charts_amount + "     size per chart: " + size);
 
 
         if(meteo.includes("temperature_2m") && meteo.includes("apparent_temperature"))
         {
+            document.getElementById('temperature_label').style.display = "block";
+            let ctx = document.getElementById('temperature_chart');
+            let dim = (size.toString()/100 * document.documentElement.clientHeight)
+            ctx.height = dim;
+
+            const chartAreaBorder = {
+              id: 'chartAreaBorder',
+              beforeDraw(chart, args, options) {
+                const {ctx, chartArea: {left, top, width, height}} = chart;
+                ctx.save();
+                ctx.strokeStyle = options.borderColor;
+                ctx.lineWidth = options.borderWidth;
+                ctx.setLineDash(options.borderDash || []);
+                ctx.lineDashOffset = options.borderDashOffset;
+                ctx.strokeRect(left, top, width, height);
+                ctx.restore();
+              }
+            };
+
             new Chart(ctx,
             {
                 type: 'line',
@@ -127,8 +164,8 @@ class Meteo
                 },
                 options:
                 {
-                    responsive: true,
-                    maintainAspectRatio: true,
+                    responsive: false,
+                    maintainAspectRatio: false,
                     tooltips:
                     {
                         enabled: false
@@ -160,11 +197,11 @@ class Meteo
                     {
                         x:
                         {
-                            beginAtZero: true,
+                            beginAtZero: false,
                             ticks:
                             {
                                 color: '#e0aaff',
-                                beginAtZero: true
+                                beginAtZero: false
                             },
                             grid:
                             {
@@ -217,7 +254,343 @@ class Meteo
             );
         }
 
+        if(meteo.includes("pressure_msl"))
+        {
+            document.getElementById('pressure_label').style.display = "block";
+            let ctx = document.getElementById('pressure_chart');
+            let dim = (size.toString()/100 * document.documentElement.clientHeight)
+            ctx.height = dim;
 
+            const chartAreaBorder = {
+              id: 'chartAreaBorder',
+              beforeDraw(chart, args, options) {
+                const {ctx, chartArea: {left, top, width, height}} = chart;
+                ctx.save();
+                ctx.strokeStyle = options.borderColor;
+                ctx.lineWidth = options.borderWidth;
+                ctx.setLineDash(options.borderDash || []);
+                ctx.lineDashOffset = options.borderDashOffset;
+                ctx.strokeRect(left, top, width, height);
+                ctx.restore();
+              }
+            };
+
+            let width, height, gradient;
+            function getGradient(ctx, chartArea) {
+              const chartWidth = chartArea.right - chartArea.left;
+              const chartHeight = chartArea.bottom - chartArea.top;
+              if (!gradient || width !== chartWidth || height !== chartHeight) {
+                // Create the gradient because this is either the first render
+                // or the size of the chart has changed
+                width = chartWidth;
+                height = chartHeight;
+                gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                gradient.addColorStop(0, '#03a7f8');
+                gradient.addColorStop(0.3, '#4cf902');
+                gradient.addColorStop(0.5, '#eba60a');
+                gradient.addColorStop(0.7, '#eb550a');
+                gradient.addColorStop(0.9, '#eb100a');
+                gradient.addColorStop(1, '#510a19');
+              }
+
+              return gradient;
+            }
+
+            new Chart(ctx,
+            {
+                type: 'line',
+                data:
+                {
+                    labels: json["hourly"]["time"],
+                    datasets:
+                    [
+                        {
+                            label: 'pressure',
+                            data: json["hourly"]["pressure_msl"],
+                            borderWidth: 5,
+                            borderColor: function(context) {
+                                const chart = context.chart;
+                                const {ctx, chartArea} = chart;
+
+                                if (!chartArea) {
+                                  // This case happens on initial chart load
+                                  return;
+                                }
+                                return getGradient(ctx, chartArea);
+                              },
+                            fill: false,
+                        },
+                    ]
+                },
+                options:
+                {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    tooltips:
+                    {
+                        enabled: false
+                    },
+                    hover:
+                    {
+                        mode: null
+                    },
+                    events:
+                    [
+
+                    ],
+                    plugins:
+                    {
+                        legend:
+                        {
+                            labels:
+                            {
+                                color: '#e0aaff'
+                            },
+                            display: false
+                        },
+                        chartAreaBorder:
+                        {
+                            borderColor: '#e0aaff',
+                            borderWidth: 2,
+                        }
+                    },
+                    scales:
+                    {
+                        x:
+                        {
+                            beginAtZero: false,
+                            ticks:
+                            {
+                                color: '#e0aaff',
+                                beginAtZero: false
+                            },
+                            grid:
+                            {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                color: "rgba(224, 170, 255, 0.5)",
+                            },
+                            border:
+                            {
+                                dash: [2,4],
+                            }
+                        },
+                        y:
+                        {
+                            min:990,
+                            max:1035,
+                            beginAtZero: false,
+                            ticks:
+                            {
+                                color: '#e0aaff',
+                                beginAtZero: false,
+                                callback: function(value, index, ticks)
+                                {
+                                    return value+" hPa";
+                                }
+                            },
+                            grid:
+                            {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                color: "rgba(224, 170, 255, 0.5)",
+
+                            },
+                            border:
+                            {
+                                dash: [2,4],
+                            }
+                        }
+                    },
+                    y1:
+                    {
+                        min:750,
+                        max:775,
+                        beginAtZero: false,
+                        ticks:
+                        {
+                            color: '#e0aaff',
+                            beginAtZero: false,
+                            callback: function(value, index, ticks)
+                            {
+                                return value+" mm";
+                            }
+                        },
+                    },
+                    elements:
+                    {
+                        point:
+                        {
+                            radius: 0
+                        }
+                    }
+                },
+                plugins: [chartAreaBorder]
+            }
+            );
+        }
+
+        if(meteo.includes("relativehumidity_2m") && meteo.includes("rain"))
+        {
+            document.getElementById('humidity_label').style.display = "block";
+            let ctx = document.getElementById('humidity_chart');
+            let dim = (size.toString()/100 * document.documentElement.clientHeight)
+            ctx.height = dim;
+
+            const chartAreaBorder = {
+              id: 'chartAreaBorder',
+              beforeDraw(chart, args, options) {
+                const {ctx, chartArea: {left, top, width, height}} = chart;
+                ctx.save();
+                ctx.strokeStyle = options.borderColor;
+                ctx.lineWidth = options.borderWidth;
+                ctx.setLineDash(options.borderDash || []);
+                ctx.lineDashOffset = options.borderDashOffset;
+                ctx.strokeRect(left, top, width, height);
+                ctx.restore();
+              }
+            };
+
+            new Chart(ctx,
+            {
+                type: 'line',
+                data:
+                {
+                    labels: json["hourly"]["time"],
+                    datasets:
+                    [
+                        {
+                            label: 'humidity',
+                            data: json["hourly"]["relativehumidity_2m"],
+                            borderWidth: 3,
+                            borderColor: '#3cde5c',
+                            backgroundColor: '#3cde5c',
+                            yAxisID: 'y',
+                        },
+                        {
+                            label: 'rain',
+                            data: json["hourly"]["rain"],
+                            borderWidth: 2,
+                            borderColor: '#2583e8',
+                            backgroundColor: '#2583e8',
+                            fill: true,
+                            yAxisID: 'y1',
+                        }
+                    ]
+                },
+                options:
+                {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    tooltips:
+                    {
+                        enabled: false
+                    },
+                    hover:
+                    {
+                        mode: null
+                    },
+                    events:
+                    [
+
+                    ],
+                    plugins:
+                    {
+                        legend:
+                        {
+                            labels:
+                            {
+                                color: '#e0aaff'
+                            }
+                        },
+                        chartAreaBorder:
+                        {
+                            borderColor: '#e0aaff',
+                            borderWidth: 2,
+                        }
+                    },
+                    scales:
+                    {
+                        x:
+                        {
+                            beginAtZero: false,
+                            ticks:
+                            {
+                                color: '#e0aaff',
+                                beginAtZero: false
+                            },
+                            grid:
+                            {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                color: "rgba(224, 170, 255, 0.5)",
+                            },
+                            border:
+                            {
+                                dash: [2,4],
+                            }
+                        },
+                        y:
+                        {
+                            beginAtZero: true,
+                            ticks:
+                            {
+                                color: '#e0aaff',
+                                beginAtZero: true,
+                                callback: function(value, index, ticks)
+                                {
+                                    return value+"%";
+                                }
+                            },
+                            grid:
+                            {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                color: "rgba(224, 170, 255, 0.5)",
+
+                            },
+                            border:
+                            {
+                                dash: [2,4],
+                            }
+                        },
+                        y1:
+                        {
+                            min: 0,
+                            max: 10,
+                            position: 'right',
+                            beginAtZero: true,
+                            ticks:
+                            {
+                                color: '#e0aaff',
+                                beginAtZero: true,
+                                callback: function(value, index, ticks)
+                                {
+                                    return value+"mm";
+                                }
+                            },
+                            border:
+                            {
+                                dash: [2,4],
+                            }
+                        }
+                    },
+                    elements:
+                    {
+                        point:
+                        {
+                            radius: 0
+                        }
+                    }
+                },
+                plugins: [chartAreaBorder]
+            }
+            );
+        }
 
 
 
