@@ -6,7 +6,9 @@ class Meteo
     {
         this.lat = 0;
         this.lon = 0;
-        this.time = 0;
+        this.timezone = "";
+        this.time = 1;
+        this.parameters = "";
     }
 
     get(url, callback)
@@ -23,11 +25,61 @@ class Meteo
         xmlHttp.send(null);
     }
 
+    prognose()
+    {
+        this.check_forecast_selection();
+
+        let url_base = "https://api.open-meteo.com/v1/forecast?";
+        let url_pos = "latitude="+this.lat+"&longitude="+this.lon;
+        let url_params = "&hourly="+this.parameters;
+        let url_time = "&forecast_days=" + this.time.toString();
+        let url_timezone = "&timezone=" + this.timezone;
+
+        let url = url_base + url_pos + url_params + url_time + url_timezone
+
+        console.log(url)
+    }
+
+    check_forecast_selection()
+    {
+        let objects = Array.prototype.slice.call(document.getElementsByClassName("forecast_option_button"));
+        let parameters = ""
+        objects.forEach(function(element)
+        {
+            let value = element.dataset.value;
+            parameters += value;
+        });
+
+        parameters = parameters.substring(1);
+        this.parameters = parameters
+    }
+
+    select_forecast(element)
+    {
+        if(element.dataset.selected == "true")
+        {
+            element.classList.remove("forecast_option_button");
+            element.classList.add("forecast_option_button_inactive");
+            element.dataset.selected = "false";
+            this.check_forecast_selection();
+
+        }else
+        {
+            element.classList.add("forecast_option_button");
+            element.classList.remove("forecast_option_button_inactive");
+            element.dataset.selected = "true";
+            this.check_forecast_selection();
+        }
+
+    }
+
     select_time(element, value)
     {
         let buttons = Array.prototype.slice.call(document.getElementsByClassName("time_select_button"));
-        buttons.forEach(element => element.style.opacity = 1.0);
-        element.style.opacity = 0.4;
+        buttons.forEach(element => element.classList.remove("time_select_button"));
+        buttons.forEach(element => element.classList.add("time_select_button_inactive"));
+        element.classList.remove("time_select_button_inactive");
+        element.classList.add("time_select_button");
 
         console.log("selected time to " + value + " days")
         this.time = value;
@@ -56,6 +108,7 @@ class Meteo
         selected_city.innerHTML = "<img src='https://open-meteo.com/images/country-flags/"+element.dataset.country_code+".svg' /><p><span class='selected_city_name'>"+element.dataset.name+"</span><span class='selected_city_pos'>"+element.dataset.latitude+" "+element.dataset.longitude+"</span></p>"
         this.lat = element.dataset.latitude;
         this.lon = element.dataset.longitude;
+        this.timezone = element.dataset.timezone;
         container.style.display = "none";
         console.log("selected city: " + element.dataset.name)
     }
@@ -84,6 +137,7 @@ class Meteo
               element.dataset.latitude = obj["latitude"];
               element.dataset.longitude = obj["longitude"]
               element.dataset.country_code = obj["country_code"]
+              element.dataset.timezone = obj["timezone"]
               container.appendChild(element);
             }
         }

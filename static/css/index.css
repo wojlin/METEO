@@ -6,6 +6,7 @@
     --time_bar: #553588;
     --forecast_bar: #372053;
     --prognose_bar: #272053;
+    --button: #a581da;
 }
 
 @font-face
@@ -62,7 +63,7 @@ body
     {
         background: var(--search_bar);
         position:relative;
-        height:25%;
+        height:22%;
         z-index:5;
     }
 
@@ -121,7 +122,7 @@ body
         display:block;
         width:100%;
         font-size: 4vw;
-        background: #a581da;
+        background: var(--button);
         border-left: solid 2px var(--text);
         border-right: solid 2px var(--text);
         border-bottom: solid 2px var(--text);
@@ -129,6 +130,7 @@ body
         z-index:10;
         position:relative;
     }
+
 
     .city_select_button > img
     {
@@ -244,13 +246,26 @@ body
     }
 
     .time_select_button {
-	width: 38%;
-	height: 10vw;
-	margin: 5%;
-	background: #7449b5;
-	border: solid 2px var(--text);
-	border-radius: 3vw;
-}
+        width: 38%;
+        height: 10vw;
+        margin: 5%;
+        background: #7449b5;
+        border: solid 2px var(--text);
+        border-radius: 3vw;
+        cursor: pointer;
+        opacity: 1;
+    }
+
+    .time_select_button_inactive {
+        width: 38%;
+        height: 10vw;
+        margin: 5%;
+        background: #7449b5;
+        border: solid 2px var(--text);
+        border-radius: 3vw;
+        cursor: pointer;
+        opacity: 0.4;
+    }
 
     .time_select_button_value
     {
@@ -267,7 +282,7 @@ body
     #forecast_container
     {
         background: var(--forecast_bar);
-        height:25%;
+        height:30%;
         position:relative;
         z-index:3;
     }
@@ -289,7 +304,46 @@ body
 
 
 
+    #forecast_options
+    {
+        margin:auto;
+        margin-top:-3vw;
+    }
 
+    .forecast_option
+    {
+        width:auto;
+        margin:1.3vw;
+        display:block;
+    }
+
+
+    .forecast_option_button
+    {
+        display: block;
+        width: 60%;
+        height: 6.5vw;
+        background: var(--button);
+        border: solid 2px var(--text);
+        border-radius: 2vw;
+        margin:auto;
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .forecast_option_button_inactive
+    {
+        display: block;
+        width: 60%;
+        height: 6.5vw;
+        background: var(--button);
+        border: solid 2px var(--text);
+        border-radius: 2vw;
+        margin:auto;
+        text-decoration: line-through;
+        opacity: 0.6;
+        cursor: pointer;
+    }
 
 
 
@@ -316,6 +370,26 @@ body
         background: var(--prognose_bar);
         border-bottom-left-radius: 2vw;
         border-bottom-right-radius: 2vw;
+    }
+
+
+    #prognose_button
+    {
+        margin:auto;
+        display:block;
+        width:70%;
+        height:14vw;
+        font-size: 8vw;
+        line-height: 8vw;
+        background: var(--button);
+        border: solid 3px var(--text);
+        border-radius: 2vw;
+    }
+
+
+    #transition
+    {
+
     }
 
 }
