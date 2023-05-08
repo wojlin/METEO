@@ -69,8 +69,22 @@
             <div id="prognose_bottom"></div>
         </div>
     </div>
-    <div id="transition">
-
+    <div id="transition" class="transition_hidden">
+        <div class="transition_bubbles">
+            <div class="transition_bubble"></div>
+            <div class="transition_bubble"></div>
+            <div class="transition_bubble"></div>
+            <div class="transition_bubble"></div>
+            <div class="transition_bubble"></div>
+        </div>
+        <div id="clouds" class="clouds_hidden">
+            <div class="cloud"></div>
+            <div class="cloud"></div>
+            <div class="cloud"></div>
+            <div class="cloud"></div>
+        </div>
+        <p id="transition-info"></p>
+        <button id="transition-button" onclick="meteo.hide_transition();">↓</button>
     </div>
 </div>
 <script>

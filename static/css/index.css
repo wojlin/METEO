@@ -7,6 +7,7 @@
     --forecast_bar: #372053;
     --prognose_bar: #272053;
     --button: #a581da;
+    --background: #1e1d2d;
 }
 
 @font-face
@@ -33,7 +34,7 @@
 
 body
 {
-    background: #1e1d2d;
+    background: var(--background);
     overflow:hidden;
 }
 
@@ -389,8 +390,187 @@ body
 
     #transition
     {
-
+        width:100%;
+        height:100vh;
+        position:absolute;
+        left:0;
+        right:0;
+        background-color: var(--background);
+        z-index:100;
+        transition: 3.5s all;
+        transition-timing-function: ease;
     }
+
+    .transition_hidden
+    {
+        top:155vh;
+    }
+
+    .transition_animate
+    {
+      top:0vh;
+    }
+
+    .transition_bubbles
+    {
+        top:0;
+        left:0;
+        right:0;
+        position:absolute;
+    }
+
+    .transition_bubble:nth-child(1)
+    {
+        width:30vw;
+        height:30vw;
+        top:-7vh;
+        left:20%;
+    }
+
+    .transition_bubble:nth-child(2)
+    {
+        width:40vw;
+        height:40vw;
+        top:-10vh;
+        left:60%;
+    }
+
+    .transition_bubble:nth-child(3)
+    {
+        width:40vw;
+        height:40vw;
+        top:-20vh;
+        left:90%;
+    }
+
+    .transition_bubble:nth-child(4)
+    {
+        width:45vw;
+        height:45vw;
+        top:-20vh;
+        left:-10%;
+    }
+
+    .transition_bubble:nth-child(5)
+    {
+        width:27vw;
+        height:27vw;
+        top:-10vh;
+        left:40%;
+    }
+
+    .transition_bubble
+    {
+        background: var(--background);
+        position:absolute;
+        z-index:99;
+        border-radius: 100%;
+    }
+
+    #clouds
+    {
+        left:0;
+        right:0;
+        position:absolute;
+        z-index:100;
+        transition: 4.5s all;
+        transition-timing-function: ease;
+    }
+
+    .cloud {
+	background: var(--background);
+	width: 20vw;
+	height: 7vw;
+	border-radius: 150px;
+	box-shadow: 1vw 1vw rgba(0,0,0,0.2);
+	animation: move 2s infinite;
+	position: absolute;
+}
+
+    .cloud::after {
+	content: '';
+	background: var(--background);
+	position: absolute;
+	width: 7vw;
+	height: 7vw;
+	border-radius: 50%;
+	top: -3vw;
+	left: 4vw;
+}
+
+    .cloud::before {
+	content: '';
+	background: var(--background);
+	position: absolute;
+	width: 11vw;
+	height: 11vw;
+	border-radius: 50%;
+	top: -5vw;
+	right: 2vw;
+}
+
+    .cloud:nth-child(1)
+    {
+        transform: scale(1.7);
+        top:-30vh;
+        left:0%;
+    }
+
+    .cloud:nth-child(2)
+    {
+        transform: scale(1.4);
+        top:-35vh;
+        left:30%;
+    }
+
+    .cloud:nth-child(3)
+    {
+        transform: scale(1.5);
+        top:-50vh;
+        left:70%;
+    }
+
+    .cloud:nth-child(4)
+    {
+        transform: scale(2);
+        top:-32vh;
+        left:80%;
+    }
+
+    .clouds_hidden
+    {
+        top: 0vh;
+    }
+
+    .clouds_animate
+    {
+        top: -15vh;
+    }
+
+    #transition-info
+    {
+        position:absolute;
+        top: 25vh;
+        left:0;
+        right:0;
+        text-align:center;
+        font-size:7vw;
+    }
+
+    #transition-button
+    {
+        position: absolute;
+        top: 35vh;
+        left:0;
+        right:0;
+        margin:auto;
+        font-size: 30vw;
+        background: none;
+        border:none;
+        cursor: pointer;
+        display: none;
+    }
+
 
 }
 

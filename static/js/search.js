@@ -29,29 +29,65 @@ class Meteo
     {
         this.check_forecast_selection();
 
-        let url_base = "https://api.open-meteo.com/v1/forecast?";
-        let url_pos = "latitude="+this.lat+"&longitude="+this.lon;
-        let url_params = "&hourly="+this.parameters;
-        let url_time = "&forecast_days=" + this.time.toString();
-        let url_timezone = "&timezone=" + this.timezone;
+        let element = document.getElementById("transition");
+        element.classList.remove("transition_hidden");
+        element.classList.add("transition_animate");
 
-        let url = url_base + url_pos + url_params + url_time + url_timezone
+        let element1 = document.getElementById("clouds");
+        element1.classList.remove("clouds_hidden");
+        element1.classList.add("clouds_animate");
 
-        console.log(url)
+        let info = document.getElementById("transition-info");
+
+        if(this.lat == 0 || this.lon == 0 || this.timezone == "")
+        {
+            info.innerHTML = "city is not selected!";
+            document.getElementById("transition-button").style.display = "block";
+        }
+        else if(this.parameters == "")
+        {
+
+            document.getElementById("transition-button").style.display = "block";
+        }else
+        {
+            info.innerHTML = "your prognose is loading";
+            document.getElementById("transition-button").style.display = "none";
+
+            let url_base = "https://api.open-meteo.com/v1/forecast?";
+            let url_pos = "latitude="+this.lat+"&longitude="+this.lon;
+            let url_params = "&hourly="+this.parameters;
+            let url_time = "&forecast_days=" + this.time.toString();
+            let url_timezone = "&timezone=" + this.timezone;
+
+            let url = url_base + url_pos + url_params + url_time + url_timezone
+
+            console.log(url)
+        }
+    }
+
+    hide_transition()
+    {
+        let element = document.getElementById("transition");
+        element.classList.remove("transition_animate");
+        element.classList.add("transition_hidden");
+
+        let element1 = document.getElementById("clouds");
+        element1.classList.remove("clouds_animate");
+        element1.classList.add("clouds_hidden");
     }
 
     check_forecast_selection()
     {
         let objects = Array.prototype.slice.call(document.getElementsByClassName("forecast_option_button"));
-        let parameters = ""
+        let param = ""
         objects.forEach(function(element)
         {
             let value = element.dataset.value;
-            parameters += value;
+            param += value;
         });
 
-        parameters = parameters.substring(1);
-        this.parameters = parameters
+        param = param.substring(1);
+        this.parameters = param;
     }
 
     select_forecast(element)
