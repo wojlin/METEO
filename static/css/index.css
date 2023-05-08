@@ -2,6 +2,7 @@
 {
 
     --text: #fcfffe;
+    --background-text: #fcfffe;
     --search_bar: #8049d5;
     --time_bar: #553588;
     --forecast_bar: #372053;
@@ -9,6 +10,35 @@
     --button: #a581da;
     --background: #1e1d2d;
 }
+
+
+:root
+{
+
+    --text: #F6F2F6;
+    --background-text: #1C252C;
+    --search_bar: #58545B;
+    --time_bar: #B7A7AE;
+    --forecast_bar: #E1D5D9;
+    --prognose_bar: #F6F2F6;
+    --button: #1C252C;
+    --background: #1C252C;
+}
+
+:root
+{
+
+    --text: #e0aaff;
+    --background-text: #e0aaff;
+    --search_bar: #240046;
+    --time_bar: #3c096c;
+    --forecast_bar: #5a189a;
+    --prognose_bar: #7b2cbf;
+    --button: #10002b;
+    --background: #10002b;
+}
+
+
 
 @font-face
 {
@@ -29,7 +59,8 @@
     margin:0;
     padding:0;
     font-family: fira-light;
-    color: #fcfffe;
+    color: var(--background-text);
+    -webkit-tap-highlight-color: transparent;
 }
 
 body
@@ -89,7 +120,7 @@ body
         width:70%;
         height:15vw;
         font-size: 9vw;
-        background: #7449b5;
+        background: var(--button);
         outline: none;
         border: solid 2px var(--text);
         text-align:center;
@@ -98,6 +129,7 @@ body
         -moz-box-sizing: border-box;    /* Firefox, other Gecko */
         box-sizing: border-box;         /* Opera/IE 8+ */
         margin-top:3vw;
+        color: var(--text);
     }
 
 
@@ -130,6 +162,7 @@ body
         border-top: none;
         z-index:10;
         position:relative;
+        color: var(--text);
     }
 
 
@@ -151,11 +184,13 @@ body
     .city_name
     {
         display:block;
+        color: var(--text);
     }
 
     .city_place
     {
         display:block;
+        color: var(--text);
     }
 
     #selected_city
@@ -185,18 +220,21 @@ body
     #selected_city  > p
     {
         display:inline-block;
+        color: var(--text);
     }
 
     .selected_city_name
     {
         font-size: 8vw;
         margin:1vw;
+        color: var(--text);
     }
 
     .selected_city_pos
     {
         font-size: 3vw;
         margin:1vw;
+        color: var(--text);
     }
 
     #search_bottom
@@ -250,7 +288,7 @@ body
         width: 38%;
         height: 10vw;
         margin: 5%;
-        background: #7449b5;
+        background: var(--button);
         border: solid 2px var(--text);
         border-radius: 3vw;
         cursor: pointer;
@@ -261,7 +299,7 @@ body
         width: 38%;
         height: 10vw;
         margin: 5%;
-        background: #7449b5;
+        background: var(--button);
         border: solid 2px var(--text);
         border-radius: 3vw;
         cursor: pointer;
@@ -271,12 +309,14 @@ body
     .time_select_button_value
     {
         font-size:8vw;
+        color: var(--text);
     }
 
     .time_select_button_label
     {
         font-size:4vw;
         line-height:4vw;
+        color: var(--text);
     }
 
 
@@ -330,6 +370,7 @@ body
         margin:auto;
         opacity: 1;
         cursor: pointer;
+        color: var(--text);
     }
 
     .forecast_option_button_inactive
@@ -344,6 +385,7 @@ body
         text-decoration: line-through;
         opacity: 0.6;
         cursor: pointer;
+        color: var(--text);
     }
 
 
@@ -385,6 +427,7 @@ body
         background: var(--button);
         border: solid 3px var(--text);
         border-radius: 2vw;
+        color: var(--text);
     }
 
 
@@ -555,6 +598,7 @@ body
         right:0;
         text-align:center;
         font-size:7vw;
+        color: var(--text);
     }
 
     #transition-button
@@ -569,8 +613,62 @@ body
         border:none;
         cursor: pointer;
         display: none;
+        color: var(--text);
     }
 
+    #meteo_container
+    {
+        width:100%;
+        height:100vh;
+        background: var(--search_bar);
+        position: absolute;
+        left:0;
+        top:0;
+        right:0;
+        bottom:0;
+        display: none;
+    }
+
+    #meteo_container > p
+    {
+        font-size: 4vw;
+        margin: auto;
+        text-align:center;
+        margin-top: 2vw;
+    }
+
+    .chart
+    {
+        display: block;
+        width:90vw !important;
+        margin:auto;
+        margin-top:2vw;
+    }
+
+    #temperature_chart
+    {
+        height: 20vh !important;
+    }
+
+    #pressure_chart
+    {
+        height: 15vh !important;
+    }
+
+    #humidity_chart
+    {
+        height: 17vh !important;
+    }
+
+    #wind_chart
+    {
+        height: 10vh !important;
+    }
+
+    #cloud_chart
+    {
+        height: 15vh !important;
+    }
 
 }
 

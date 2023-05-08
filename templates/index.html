@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/index.css') }}">
+    <title>weather app</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+    <link rel="icon" type="image/x-icon" href="/static/images/weather.png">
     <meta name="color-scheme" content="light only">
     <meta name="theme-color" content="#2f2c51"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <script src="{{url_for('static', filename='js/search.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/search.js"></script>
 </head>
 <body>
 <div>
@@ -85,6 +87,18 @@
         </div>
         <p id="transition-info"></p>
         <button id="transition-button" onclick="meteo.hide_transition();">↓</button>
+    </div>
+    <div id="meteo_container">
+        <p>Temperature & Apparent</p>
+        <canvas class="chart" id="temperature_chart"></canvas>
+        <p>Pressure</p>
+        <canvas class="chart" id="pressure_chart"></canvas>
+        <p>Humidity & Rain</p>
+        <canvas class="chart" id="humidity_chart"></canvas>
+        <p>Wind Direction & Speed</p>
+        <canvas class="chart" id="wind_chart"></canvas>
+        <p>Cloud Cover</p>
+        <canvas class="chart" id="cloud_chart"></canvas>
     </div>
 </div>
 <script>
