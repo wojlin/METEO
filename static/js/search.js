@@ -592,6 +592,304 @@ class Meteo
             );
         }
 
+        if(meteo.includes("windspeed_10m") && meteo.includes("winddirection_10m"))
+        {
+            document.getElementById('wind_label').style.display = "block";
+            let ctx = document.getElementById('wind_chart');
+            let dim = (size.toString()/100 * document.documentElement.clientHeight)
+            ctx.height = dim;
+
+            const chartAreaBorder = {
+              id: 'chartAreaBorder',
+              beforeDraw(chart, args, options) {
+                const {ctx, chartArea: {left, top, width, height}} = chart;
+                ctx.save();
+                ctx.strokeStyle = options.borderColor;
+                ctx.lineWidth = options.borderWidth;
+                ctx.setLineDash(options.borderDash || []);
+                ctx.lineDashOffset = options.borderDashOffset;
+                ctx.strokeRect(left, top, width, height);
+                ctx.restore();
+              }
+            };
+
+
+            var floor = Math.floor,
+                abs = Math.abs;
+            function largestTriangleThreeBuckets(data, threshold) {
+
+                var data_length = data.length;
+                if (threshold >= data_length || threshold === 0) {
+                    return data; // Nothing to do
+                }
+
+                var sampled = [],
+                    sampled_index = 0;
+
+                // Bucket size. Leave room for start and end data points
+                var every = (data_length - 2) / (threshold - 2);
+
+                var a = 0,  // Initially a is the first point in the triangle
+                    max_area_point,
+                    max_area,
+                    area,
+                    next_a;
+
+                sampled[ sampled_index++ ] = data[ a ]; // Always add the first point
+
+                for (var i = 0; i < threshold - 2; i++) {
+
+                    // Calculate point average for next bucket (containing c)
+                    var avg_x = 0,
+                        avg_y = 0,
+                        avg_range_start  = floor( ( i + 1 ) * every ) + 1,
+                        avg_range_end    = floor( ( i + 2 ) * every ) + 1;
+                    avg_range_end = avg_range_end < data_length ? avg_range_end : data_length;
+
+                    var avg_range_length = avg_range_end - avg_range_start;
+
+                    for ( ; avg_range_start<avg_range_end; avg_range_start++ ) {
+                      avg_x += data[ avg_range_start ][ 0 ] * 1; // * 1 enforces Number (value may be Date)
+                      avg_y += data[ avg_range_start ][ 1 ] * 1;
+                    }
+                    avg_x /= avg_range_length;
+                    avg_y /= avg_range_length;
+
+                    // Get the range for this bucket
+                    var range_offs = floor( (i + 0) * every ) + 1,
+                        range_to   = floor( (i + 1) * every ) + 1;
+
+                    // Point a
+                    var point_a_x = data[ a ][ 0 ] * 1, // enforce Number (value may be Date)
+                        point_a_y = data[ a ][ 1 ] * 1;
+
+                    max_area = area = -1;
+
+                    for ( ; range_offs < range_to; range_offs++ ) {
+                        // Calculate triangle area over three buckets
+                        area = abs( ( point_a_x - avg_x ) * ( data[ range_offs ][ 1 ] - point_a_y ) -
+                                    ( point_a_x - data[ range_offs ][ 0 ] ) * ( avg_y - point_a_y )
+                                  ) * 0.5;
+                        if ( area > max_area ) {
+                            max_area = area;
+                            max_area_point = data[ range_offs ];
+                            next_a = range_offs; // Next a is this b
+                        }
+                    }
+
+                    sampled[ sampled_index++ ] = max_area_point; // Pick this point from the bucket
+                    a = next_a; // This a is the next a (chosen b)
+                }
+
+                sampled[ sampled_index++ ] = data[ data_length - 1 ]; // Always add last
+
+                return sampled;
+            }
+
+            let wind_speed = json["hourly"]["windspeed_10m"];
+            let wind_dir = json["hourly"]["winddirection_10m"];
+            let wind_labels = json["hourly"]["time"];
+
+            function pack(first)
+            {
+                let output = [];
+                let count = 0;
+                for (const key in first)
+                {
+                    output.push([count, first[key]]);
+                    count+=1;
+                }
+                return output;
+            }
+
+            let wind_pack =  largestTriangleThreeBuckets(pack(wind_speed), 20);
+            let wind_pack_dir =  largestTriangleThreeBuckets(pack(wind_dir), 20);
+
+            console.log(wind_pack)
+            console.log(wind_pack_dir)
+
+            function unpackArray(array) {
+              const x = [];
+              const y = [];
+
+              for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const valueX = item[0];
+                const valueY = item[1];
+
+                x.push(valueX);
+                y.push(valueY);
+              }
+
+              return { x, y };
+            }
+
+
+            function unpackArray1(array) {
+              const x1 = [];
+              const y1 = [];
+
+              for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const valueX = item[0];
+                const valueY = item[1];
+
+                x1.push(valueX);
+                y1.push(valueY);
+              }
+
+              return { x1, y1 };
+            }
+
+
+            const { x, y } = unpackArray(wind_pack);
+
+
+            let x_val = x;
+            let y_val = y;
+
+            const { x1, y1 } = unpackArray1(wind_pack_dir);
+
+            let dir_val = y1;
+
+            function map_range(value, low1, high1, low2, high2) {
+                return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+            }
+
+            x_val.forEach(function (value, i) {
+                let remapped = Math.floor(map_range(i, 0, Object.keys(x_val).length, 0, Object.keys(wind_labels).length));
+                x_val[i] = wind_labels[remapped];
+            });
+
+
+            console.log(x_val);
+            console.log(y_val);
+            console.log(dir_val);
+
+            const arrow = new Image();
+            arrow.src = "/static/images/arrow.png";
+
+            new Chart(ctx,
+            {
+                type: 'line',
+                data:
+                {
+                    labels: x_val,
+                    datasets:
+                    [
+                        {
+                            label: 'wind speed',
+                            data: y_val,
+                            borderWidth: 0,
+                            borderColor: '#e6a91c',
+                            backgroundColor: '#e6a91c',
+                            yAxisID: 'y',
+                            pointStyle: arrow,
+                            pointRotation: dir_val,
+                            pointRadius: 7
+                        }
+                    ]
+                },
+                options:
+                {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    tooltips:
+                    {
+                        enabled: false
+                    },
+                    hover:
+                    {
+                        mode: null
+                    },
+                    events:
+                    [
+
+                    ],
+                    plugins:
+                    {
+                        legend:
+                        {
+                            labels:
+                            {
+                                color: '#e0aaff'
+                            },
+                            display: false
+                        },
+                        chartAreaBorder:
+                        {
+                            borderColor: '#e0aaff',
+                            borderWidth: 2,
+                        }
+                    },
+                    scales:
+                    {
+                        x:
+                        {
+                            beginAtZero: false,
+                            ticks:
+                            {
+                                color: '#e0aaff',
+                                beginAtZero: false
+                            },
+                            grid:
+                            {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                color: "rgba(224, 170, 255, 0.5)",
+                            },
+                            border:
+                            {
+                                dash: [2,4],
+                            }
+                        },
+                        y:
+                        {
+                            beginAtZero: true,
+                            ticks:
+                            {
+                                color: '#e0aaff',
+                                beginAtZero: true,
+                                callback: function(value, index, ticks)
+                                {
+                                    return value+" km/h";
+                                }
+                            },
+                            grid:
+                            {
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: true,
+                                color: "rgba(224, 170, 255, 0.5)",
+
+                            },
+                            border:
+                            {
+                                dash: [2,4],
+                            }
+                        }
+                    },
+                    elements:
+                    {
+                        point:
+                        {
+                            borderWidth: 1,
+                            borderColor: 'black',
+                            hitRadius: 5,
+                            hoverRadius: 5,
+                            radius: 5
+                        }
+                    }
+                },
+                plugins:
+                [
+                    chartAreaBorder
+                ]
+            }
+            );
+        }
+
 
 
         document.getElementById("settings_container").style.display = "none";

@@ -57,7 +57,10 @@ body
     overflow:hidden;
 }
 
-
+p
+{
+    user-select: none;
+}
 
 @media (min-aspect-ratio: 2/5)
 {
