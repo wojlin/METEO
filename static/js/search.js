@@ -788,7 +788,7 @@ class Meteo
             console.log(dir_val);
 
             const arrow = new Image();
-            arrow.src = "/static/images/arrow.png";
+            arrow.src = "static/images/arrow.png";
 
             new Chart(ctx,
             {
