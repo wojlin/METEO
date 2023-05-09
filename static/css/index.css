@@ -632,7 +632,7 @@ p
     {
         display: block;
         width:90vw !important;
-        height: auto;
+        height: 0vh;
         margin:auto;
         margin-top:2vw;
     }
