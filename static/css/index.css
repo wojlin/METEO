@@ -31,14 +31,14 @@
 @font-face
 {
     font-family: fira-thin;
-    src: url('static/fonts/FiraSans-Thin.ttf');
+    src: url('../fonts/FiraSans-Thin.ttf');
     font-weight: normal;
 }
 
 @font-face
 {
     font-family: fira-light;
-    src: url('static/fonts/FiraSans-ExtraLight.ttf');
+    src: url('../fonts/FiraSans-ExtraLight.ttf');
     font-weight: bold;
 }
 
