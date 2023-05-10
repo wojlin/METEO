@@ -89,6 +89,13 @@
         <button id="transition-button" onclick="meteo.hide_transition();">↓</button>
     </div>
     <div id="meteo_container">
+        <div onclick="meteo.go_back();" id="back_button">
+            <div class="back_arrow">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
         <p id="temperature_label">Temperature & Apparent</p>
         <canvas class="chart" id="temperature_chart"></canvas>
         <p id="pressure_label">Pressure</p>

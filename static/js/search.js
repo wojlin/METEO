@@ -9,6 +9,7 @@ class Meteo
         this.timezone = "";
         this.time = 1;
         this.parameters = "";
+        this.charts = [];
     }
 
     get(url, callback)
@@ -23,6 +24,38 @@ class Meteo
         }
         xmlHttp.open("GET", url, true);
         xmlHttp.send(null);
+    }
+
+    display_menu()
+    {
+        document.getElementById("settings_container").style.display = "block";
+        document.getElementById("meteo_container").style.display = "none";
+        let element = document.getElementById("transition");
+        element.classList.remove("transition_animate");
+        element.classList.add("transition_hidden");
+
+        let element1 = document.getElementById("clouds");
+        element1.classList.remove("clouds_animate");
+        element1.classList.add("clouds_hidden");
+
+        meteo.charts.forEach(element => element.destroy());
+    }
+
+    go_back()
+    {
+        let element = document.getElementById("transition");
+        element.classList.remove("transition_hidden");
+        element.classList.add("transition_animate");
+
+        let element1 = document.getElementById("clouds");
+        element1.classList.remove("clouds_hidden");
+        element1.classList.add("clouds_animate");
+
+        let info = document.getElementById("transition-info");
+
+        info.innerHTML = "going back...";
+
+        setTimeout(this.display_menu, 4000);
     }
 
     hide_transition()
@@ -159,7 +192,7 @@ class Meteo
               }
             };
 
-            new Chart(ctx,
+            let chart = new Chart(ctx,
             {
                 type: 'line',
                 data:
@@ -168,14 +201,14 @@ class Meteo
                     datasets:
                     [
                         {
-                            label: 'temperature',
+                            label: 'real',
                             data: json["hourly"]["temperature_2m"],
                             borderWidth: 3,
                             borderColor: '#f78d9b',
                             backgroundColor: '#f78d9b',
                         },
                         {
-                            label: 'apparent temperature',
+                            label: 'apparent',
                             data: json["hourly"]["apparent_temperature"],
                             borderWidth: 2,
                             borderColor: '#8da8f7',
@@ -272,7 +305,14 @@ class Meteo
                 },
                 plugins: [chartAreaBorder]
             }
+            
             );
+
+            meteo.charts.push(chart);
+
+        }else
+        {
+            document.getElementById('temperature_label').style.display = "none";
         }
 
         if(meteo.includes("pressure_msl"))
@@ -317,7 +357,7 @@ class Meteo
               return gradient;
             }
 
-            new Chart(ctx,
+            let chart1 = new Chart(ctx,
             {
                 type: 'line',
                 data:
@@ -451,6 +491,12 @@ class Meteo
                 plugins: [chartAreaBorder]
             }
             );
+
+            meteo.charts.push(chart1);
+        }
+        else
+        {
+            document.getElementById('pressure_label').style.display = "none";
         }
 
         if(meteo.includes("relativehumidity_2m") && meteo.includes("rain"))
@@ -474,7 +520,7 @@ class Meteo
               }
             };
 
-            new Chart(ctx,
+            let chart2 = new Chart(ctx,
             {
                 type: 'line',
                 data:
@@ -611,6 +657,12 @@ class Meteo
                 plugins: [chartAreaBorder]
             }
             );
+
+            meteo.charts.push(chart2);
+        }
+        else
+        {
+            document.getElementById('humidity_label').style.display = "none";
         }
 
         if(meteo.includes("windspeed_10m") && meteo.includes("winddirection_10m"))
@@ -790,7 +842,7 @@ class Meteo
             const arrow = new Image();
             arrow.src = "static/images/arrow.png";
 
-            new Chart(ctx,
+            let chart3 = new Chart(ctx,
             {
                 type: 'line',
                 data:
@@ -909,6 +961,11 @@ class Meteo
                 ]
             }
             );
+
+            meteo.charts.push(chart3);
+        }else
+        {
+            document.getElementById('wind_label').style.display = "none";
         }
 
         if(meteo.includes("cloudcover") && meteo.includes("cloudcover_low") && meteo.includes("cloudcover_mid") && meteo.includes("cloudcover_high"))
@@ -953,7 +1010,7 @@ class Meteo
               return gradient;
             }
 
-            new Chart(ctx,
+            let chart4 = new Chart(ctx,
             {
                 type: 'line',
                 data:
@@ -1080,6 +1137,12 @@ class Meteo
                 plugins: [chartAreaBorder]
             }
             );
+
+            meteo.charts.push(chart4);
+        }
+        else
+        {
+            document.getElementById('cloud_label').style.display = "none";
         }
 
         document.getElementById("settings_container").style.display = "none";
