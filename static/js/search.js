@@ -30,6 +30,7 @@ class Meteo
     {
         document.getElementById("settings_container").style.display = "block";
         document.getElementById("meteo_container").style.display = "none";
+        document.getElementById("meteo_simple_container").style.display = "none";
         let element = document.getElementById("transition");
         element.classList.remove("transition_animate");
         element.classList.add("transition_hidden");
@@ -79,6 +80,145 @@ class Meteo
         {
             return false;
         }
+    }
+
+    display_simple_meteo(response)
+    {
+        document.getElementById("settings_container").style.display = "none";
+        document.getElementById("meteo_container").style.display = "none";
+        document.getElementById("meteo_simple_container").style.display = "block";
+
+        let element = document.getElementById("transition");
+        element.classList.remove("transition_animate");
+        element.classList.add("transition_hidden");
+
+        let element1 = document.getElementById("clouds");
+        element1.classList.remove("clouds_animate");
+        element1.classList.add("clouds_hidden");
+
+        let json = JSON.parse(response);
+        console.log(json);
+
+        let unit = "";
+        let temp_unit = ""
+        
+
+        if("hourly" in json)
+        {
+            unit = "hourly";
+            temp_unit = "temperature_2m";
+        }
+        else if("daily" in json)
+        {
+            unit = "daily";
+            temp_unit = "temperature_2m_max";
+        }
+        else
+        {
+            console.error("unknown error");
+            return;
+        }
+
+        let container = document.getElementById("meteo_simple_box_container");
+        container.innerHTML = "";
+
+        for(let i = 0; i<json[unit]["time"].length; i++)
+        {
+
+            let day_part = ""
+            if("hourly" in json && "daily" in json)
+            {
+                let current_date = Date.parse(json[unit]["time"][i]);
+                let sunrise_date = Date.parse(json['daily']["sunrise"]);
+                let sunset_date = Date.parse(json['daily']["sunset"]);
+                if(current_date < sunset_date)
+                {   
+                    
+                    if(current_date < sunrise_date)
+                    {
+                        day_part = "night"
+                    }
+                    else
+                    {
+                        day_part = "day"
+                    }
+                }
+                else
+                {
+                    day_part = "night"
+                }
+            }
+            else
+            {
+                day_part = "day"
+            }
+
+            
+
+            let wmo_code = 
+            {
+                0: {"name": "clear sky", "icon": "static/images/icons/"+day_part+"/clear_sky.png"},
+                1: {"name": "mainly clear", "icon": "static/images/icons/"+day_part+"/mainly_clear.png"},
+                2: {"name": "partly cloudy", "icon": "static/images/icons/"+day_part+"/partly_cloudy.png"},
+                3: {"name": "overcast", "icon": "static/images/icons/"+day_part+"/overcast.png"},
+                45: {"name": "fog", "icon": "static/images/icons/"+day_part+"/fog.png"},
+                48: {"name": "rime fog", "icon": "static/images/icons/"+day_part+"/rime_fog.png"},
+                51: {"name": "light drizzle", "icon": "static/images/icons/"+day_part+"/drizzle.png"},
+                53: {"name": "moderate drizzle", "icon": "static/images/icons/"+day_part+"/drizzle.png"},
+                55: {"name": "dense drizzle", "icon": "static/images/icons/"+day_part+"/drizzle.png"},
+                56: {"name": "light freezing drizzle", "icon": "static/images/icons/"+day_part+"/drizzle.png"},
+                57: {"name": "dense freezing drizzle", "icon": "static/images/icons/"+day_part+"/drizzle.png"},
+                61: {"name": "slight rain", "icon": "static/images/icons/"+day_part+"/slight_rain.png"},
+                63: {"name": "moderate rain", "icon": "static/images/icons/"+day_part+"/moderate_rain.png"},
+                65: {"name": "heavy rain", "icon": "static/images/icons/"+day_part+"/heavy_rain.png"},
+                66: {"name": "light freezing rain", "icon": "static/images/icons/"+day_part+"/slight_freezing_rain.png"},
+                67: {"name": "dense freezing rain", "icon": "static/images/icons/"+day_part+"/heavy_freezing_rain.png"},
+                71: {"name": "slight snow fall", "icon": "static/images/icons/"+day_part+"/light_snow_fall.png"},
+                73: {"name": "moderate snow fall", "icon": "static/images/icons/"+day_part+"/moderate_snow_fall.png"},
+                75: {"name": "heavy snow fall", "icon": "static/images/icons/"+day_part+"/heavy_snow_fall.png"},
+                77: {"name": "snow grains", "icon": "static/images/icons/"+day_part+"/snow_grains.png"},
+                80: {"name": "slight rain shower", "icon": "static/images/icons/"+day_part+"/rain_shower.png"},
+                81: {"name": "moderate rain shower", "icon": "static/images/icons/"+day_part+"/rain_shower.png"},
+                82: {"name": "violent rain shower", "icon": "static/images/icons/"+day_part+"/rain_shower.png"},
+                85: {"name": "light snow shower", "icon": "static/images/icons/"+day_part+"/slight_snow_shower.png"},
+                86: {"name": "violent snow shower", "icon": "static/images/icons/"+day_part+"/heavy_snow_shower.png"},
+                95: {"name": "thunderstorm", "icon": "static/images/icons/"+day_part+"/thunderstorm.png"},
+                96: {"name": "thunderstorm with slight hail", "icon": "static/images/icons/"+day_part+"/thunderstorm.png"},
+                99: {"name": "thunderstorm with heavy hail", "icon": "static/images/icons/"+day_part+"/thunderstorm.png"}
+            }
+
+            let time = json[unit]["time"][i];
+            let code = json[unit]["weathercode"][i];
+            let temperature = json[unit][temp_unit][i];
+
+            let div = document.createElement("div");
+            div.classList.add("simple_container")
+
+            let time_p = document.createElement("p");
+            time_p.innerHTML = time.substring(5);
+            time_p.classList.add("simple_container_time")
+
+
+            let code_p = document.createElement("p");
+            code_p.innerHTML = wmo_code[parseInt(code)]["name"];
+            code_p.classList.add("simple_container_code")
+
+            let temperature_p = document.createElement("p");
+            temperature_p.innerHTML = temperature + "<span style='opacity:0.6;'>°C</span>";
+            temperature_p.classList.add("simple_container_temperature")
+
+            let icon_div = document.createElement("div");
+            icon_div.innerHTML = "<img src='"+wmo_code[parseInt(code)]["icon"]+"' alt='' />";
+            icon_div.classList.add("simple_container_icon")
+
+            div.appendChild(time_p);
+            div.appendChild(code_p);
+            div.appendChild(temperature_p);
+            div.appendChild(icon_div);
+
+            container.appendChild(div);
+        }
+
     }
 
     display_meteo(response)
@@ -1147,6 +1287,8 @@ class Meteo
 
         document.getElementById("settings_container").style.display = "none";
         document.getElementById("meteo_container").style.display = "block";
+        document.getElementById("meteo_simple_container").style.display = "none";
+
         let element = document.getElementById("transition");
         element.classList.remove("transition_animate");
         element.classList.add("transition_hidden");
@@ -1158,7 +1300,8 @@ class Meteo
 
     }
 
-    prognose()
+
+    prognose(value)
     {
         this.check_forecast_selection();
 
@@ -1185,17 +1328,56 @@ class Meteo
         {
             info.innerHTML = "your prognose is loading";
             document.getElementById("transition-button").style.display = "none";
+            
+            if(value == "advanced")
+            {
+                let url_base = "https://api.open-meteo.com/v1/forecast?";
+                let url_pos = "latitude="+this.lat+"&longitude="+this.lon;
+                let url_params = "&hourly="+this.parameters;
+                let url_time = "&forecast_days=" + this.time.toString();
+                let url_timezone = "&timezone=" + this.timezone;
 
-            let url_base = "https://api.open-meteo.com/v1/forecast?";
-            let url_pos = "latitude="+this.lat+"&longitude="+this.lon;
-            let url_params = "&hourly="+this.parameters;
-            let url_time = "&forecast_days=" + this.time.toString();
-            let url_timezone = "&timezone=" + this.timezone;
+                let url = url_base + url_pos + url_params + url_time + url_timezone
 
-            let url = url_base + url_pos + url_params + url_time + url_timezone
+                console.log(url)
+                setTimeout(this.get, 5000, url, this.display_meteo);
+            }
+            else if(value == "simple")
+            {
 
-            console.log(url)
-            setTimeout(this.get, 5000, url, this.display_meteo);
+                let url = "";
+
+                if(this.time == 1)
+                {
+                    let code = "hourly"
+                    let url_base = "https://api.open-meteo.com/v1/forecast?";
+                    let url_pos = "latitude="+this.lat+"&longitude="+this.lon;
+                    let url_params = "&"+code+"="+"weathercode,temperature_2m&daily=sunrise,sunset";
+                    let url_time = "&forecast_days=" + this.time.toString();
+                    let url_timezone = "&timezone=" + this.timezone;
+                    url = url_base + url_pos + url_params + url_time + url_timezone
+                }
+                else
+                {
+                    let code = "daily"
+                    let url_base = "https://api.open-meteo.com/v1/forecast?";
+                    let url_pos = "latitude="+this.lat+"&longitude="+this.lon;
+                    let url_params = "&"+code+"="+"weathercode,temperature_2m_max";
+                    let url_time = "&forecast_days=" + this.time.toString();
+                    let url_timezone = "&timezone=" + this.timezone;
+                    url = url_base + url_pos + url_params + url_time + url_timezone
+                }
+                
+                
+
+                
+
+                console.log(url)
+                setTimeout(this.get, 5000, url, this.display_simple_meteo);
+            }else
+            {
+                console.error("prognose not implemented!")
+            }
 
         }
     }

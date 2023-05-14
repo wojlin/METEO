@@ -67,7 +67,47 @@
         <div id="prognose_container">
             <p class="step">4.</p>
             <p id="prognose_label">Prognose</p>
-            <button id="prognose_button" onclick="meteo.prognose();">Prognose</button>
+            <div class="prognose_buttons">
+                <button id="prognose_simple_button" onclick="meteo.prognose('simple');">Simple</button>
+                <button id="prognose_button" onclick="meteo.prognose('advanced');">Advanced</button>
+            </div>
+            <div class="prognose_buttons">
+                <div class="left_gear">
+                    <div class="gear one">
+                        <div class="gear-inner">
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                        </div>
+                      </div>
+                </div>
+                <div class="right_gear">
+                    <div class="gear one">
+                        <div class="gear-inner">
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                        </div>
+                      </div>
+                      <div class="gear two">
+                        <div class="gear-inner">
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                        </div>
+                      </div>
+                      <div class="gear three">
+                        <div class="gear-inner">
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                          <div class="bar"></div>
+                        </div>
+                      </div>
+                </div>
+                
+            </div>
+            
+
             <div id="prognose_bottom"></div>
         </div>
     </div>
@@ -89,7 +129,7 @@
         <button id="transition-button" onclick="meteo.hide_transition();">↓</button>
     </div>
     <div id="meteo_container">
-        <div onclick="meteo.go_back();" id="back_button">
+        <div onclick="meteo.go_back();" class="back_button">
             <div class="back_arrow">
                 <span></span>
                 <span></span>
@@ -106,6 +146,23 @@
         <canvas class="chart" id="wind_chart"></canvas>
         <p id="cloud_label">Cloud Cover</p>
         <canvas class="chart" id="cloud_chart"></canvas>
+    </div>
+    <div id="meteo_simple_container">
+        <div onclick="meteo.go_back();" class="back_button">
+            <div class="back_arrow">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="meteo_simple_box_container"></div>
+        <div class="scroll_down">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
 </div>
 <script>
