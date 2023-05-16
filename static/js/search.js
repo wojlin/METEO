@@ -101,16 +101,18 @@ class Meteo
 
         let unit = "";
         let temp_unit = ""
-        
+        let substring_amount = 0;
 
         if("hourly" in json)
         {
             unit = "hourly";
+            substring_amount = 11;
             temp_unit = "temperature_2m";
         }
         else if("daily" in json)
         {
             unit = "daily";
+            substring_amount = 5;
             temp_unit = "temperature_2m_max";
         }
         else
@@ -121,6 +123,7 @@ class Meteo
 
         let container = document.getElementById("meteo_simple_box_container");
         container.innerHTML = "";
+        
 
         for(let i = 0; i<json[unit]["time"].length; i++)
         {
@@ -195,7 +198,7 @@ class Meteo
             div.classList.add("simple_container")
 
             let time_p = document.createElement("p");
-            time_p.innerHTML = time.substring(5);
+            time_p.innerHTML = time.substring(substring_amount);
             time_p.classList.add("simple_container_time")
 
 
@@ -1433,6 +1436,9 @@ class Meteo
     {
         console.log("deselected city!")
         let input = document.getElementById("search_input");
+        this.lat = 0;
+        this.lon = 0;
+        this.timezone = "";
         input.focus();
         input.select();
         element.style.display = "none";
