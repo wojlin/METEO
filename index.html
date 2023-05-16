@@ -179,10 +179,12 @@
         if (Math.abs(scrollHeight - clientHeight - scrollTop) < 1) 
         {
             console.log('scrolled down');
+            document.getElementsByClassName("scroll_down")[0].style.transform = "rotate(225deg)";
         }
-        else
+        else if (Math.abs(scrollTop) <= 0) 
         {
             console.log('scrolled up');
+            document.getElementsByClassName("scroll_down")[0].style.transform = "rotate(45deg)";
         }
     });
 
