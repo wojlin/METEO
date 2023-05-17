@@ -50,10 +50,12 @@
             <p class="step">3.</p>
             <p id="forecast_label">Choose Forecast</p>
 
-            <div id="forecast_options">
+            <div class="forecast_options_top">
                 <div class="forecast_option"><button class="forecast_option_button" data-selected="true" data-value=",temperature_2m,apparent_temperature" onclick="meteo.select_forecast(this)"><img src='static/images/temperature.png'/></button></div>
                 <div class="forecast_option"><button class="forecast_option_button" data-selected="true" data-value=",pressure_msl" onclick="meteo.select_forecast(this)"><img src='static/images/barometer.png'/></button></div>
                 <div class="forecast_option"><button class="forecast_option_button" data-selected="true" data-value=",relativehumidity_2m,rain" onclick="meteo.select_forecast(this)"><img src='static/images/rain.png'/></button></div>
+            </div>
+            <div class="forecast_options_bottom">
                 <div class="forecast_option"><button class="forecast_option_button_inactive" data-selected="false" data-value=",windspeed_10m,winddirection_10m" onclick="meteo.select_forecast(this)"><img src='static/images/wind.png'/></button></div>
                 <div class="forecast_option"><button class="forecast_option_button_inactive" data-selected="false" data-value=",cloudcover,cloudcover_low,cloudcover_mid,cloudcover_high" onclick="meteo.select_forecast(this)"><img src='static/images/cloud.png'/></button></div>
             </div>
@@ -187,6 +189,8 @@
             document.getElementsByClassName("scroll_down")[0].style.transform = "rotate(45deg)";
         }
     });
+
+    
 
 </script>
 

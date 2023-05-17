@@ -328,14 +328,24 @@ p
 
 
 
-    #forecast_options
+    .forecast_options_top
     {
         margin:auto;
         margin-top:-3vw;
         display: grid;
-        height: 60%;
+        height: 40%;
         width: 70%;
         grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .forecast_options_bottom
+    {
+        margin:auto;
+        margin-top:-3vw;
+        display: grid;
+        height: 40%;
+        width: 45%;
+        grid-template-columns: 1fr 1fr;
     }
 
     .forecast_option

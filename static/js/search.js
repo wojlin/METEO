@@ -1461,6 +1461,9 @@ class Meteo
         this.timezone = element.dataset.timezone;
         container.style.display = "none";
         console.log("selected city: " + element.dataset.name)
+        
+        let text = document.getElementsByClassName("selected_city_name")[0];
+        text.style.fontSize = (7-(0.3*(element.dataset.name.length))).toString() + "vw";
     }
 
 
